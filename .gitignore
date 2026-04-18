@@ -1,0 +1,50 @@
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+pipeline.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Saídas de pipeline
+output/
+results/
+data/
+*.csv
+*.parquet
+*.json
+
+# Configurações locais
+.env
+.env.*
+*.local
+config/local.yaml
+
+# Diretórios de cache
+.cache/
+__pycache__/
+*.pyc
+
+# Dependências
+node_modules/
+venv/
+.envrc
+
+# Build e artefatos
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Ferramentas de CI/CD
+*.coverage
+.coverage/
+coverage.xml
+reports/
