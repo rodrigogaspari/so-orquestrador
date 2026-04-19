@@ -1,4 +1,6 @@
 //using Swashbuckle.AspNetCore.Filters;
+using Microsoft.OpenApi;
+using so_orquestrador.Infrastructure.Services.Controllers;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 
@@ -28,15 +30,23 @@ internal class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddSwaggerGen(c =>
         {
-            //c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-            //{
-            //    Title = "Minha API",
-            //    Version = "v1"
-            //});
-
-            // Ativa suporte a exemplos
             c.ExampleFilters();
+
+            c.OperationFilter<AddApiKeyHeaderParameter>();
         });
+
+
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "API Venda",
+                Description = "Apresentação Smart Online - Gaspari",
+            });
+        });
+
+
 
         builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 

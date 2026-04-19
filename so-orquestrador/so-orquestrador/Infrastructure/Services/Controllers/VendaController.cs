@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Net;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace so_orquestrador.Infrastructure.Services.Controllers
 {
@@ -24,7 +27,6 @@ namespace so_orquestrador.Infrastructure.Services.Controllers
         ///         
         ///</remarks>
         /// <param name="request">Corpo da requisição do recurso.</param>
-        /// <param name="idempotencyKey">Chave única para controle de Idempotência.</param>
         /// <response code="200">Retorna sucesso na consulta.</response>
         /// <response code="400">Se houver algum tipo de problema/validação na consulta.</response>
         /// <response code="422">Se houver algum tipo de erro com os dados da operação.</response>
@@ -146,13 +148,25 @@ namespace so_orquestrador.Infrastructure.Services.Controllers
     }
 
 
-    public class ApiKeyHeaderExample : IExamplesProvider<string>
+    public class AddApiKeyHeaderParameter : IOperationFilter
     {
-        public string GetExamples()
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            return "12345-ABCDE-67890";
+            if (operation.Parameters.Where(p => p.Name.Equals("idempotencyKey")).Any())
+                operation.Parameters.Remove(operation.Parameters.Where(p => p.Name.Equals("idempotencyKey")).FirstOrDefault());
+             
+            operation.Parameters.Add(new OpenApiParameter
+                {
+                    Name = "idempotencyKey",
+                    In = ParameterLocation.Header,
+                    Required = true,
+                    Description = "Chave de idempotência para uso do endpoint.",
+                    Example = JsonValue.Create(Guid.NewGuid().ToString())
+                });
+            
         }
     }
+
 
 
 
