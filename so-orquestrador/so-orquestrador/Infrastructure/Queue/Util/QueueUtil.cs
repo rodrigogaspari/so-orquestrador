@@ -2,14 +2,14 @@
 using System.Text;
 using System.Text.Json;
 
-namespace so_orquestrador.Infrastructure.Services.Util
+namespace so_orquestrador.Infrastructure.Queue.Util
 {
     public static class QueueUtil
     {
         public static string FilaCancelar { get { return "cancelar-fila";} }
         public static string FilaCancelarDlq { get { return "cancelar-dlq"; } }
 
-        public static void ConfigureQueues()
+        public static void ConfigureQueuesProcucer()
         {
             // Cria a factory conforme a instância local (apenas experimentos)
             var factory = new ConnectionFactory()

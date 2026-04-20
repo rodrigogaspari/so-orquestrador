@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using so_orquestrador.Infrastructure.Services.Util;
+using so_orquestrador.Infrastructure.Queue.Util;
 using so_orquestrador.WebApi.Contracts.Requests;
 using so_orquestrador.WebApi.Contracts.Responses;
 using so_orquestrador.WebApi.SwaggerGen;

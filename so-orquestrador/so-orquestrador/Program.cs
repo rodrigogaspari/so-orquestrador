@@ -1,6 +1,6 @@
 using RabbitMQ.Client;
+using so_orquestrador.Infrastructure.Queue.Util;
 using so_orquestrador.Infrastructure.Services.Extensions;
-using so_orquestrador.Infrastructure.Services.Util;
 using System.Text;
 using System.Text.Json;
 
@@ -22,7 +22,7 @@ internal class Program
         services.ConfigureSwaggerAppServices();
 
         // Configurando as filas da aplicação
-        QueueUtil.ConfigureQueues();
+        QueueUtil.ConfigureQueuesProcucer();
 
         var app = builder.Build();
 
