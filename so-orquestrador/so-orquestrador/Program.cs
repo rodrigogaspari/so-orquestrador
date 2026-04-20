@@ -1,4 +1,8 @@
+using RabbitMQ.Client;
 using so_orquestrador.Infrastructure.Services.Extensions;
+using so_orquestrador.Infrastructure.Services.Util;
+using System.Text;
+using System.Text.Json;
 
 internal class Program
 {
@@ -16,6 +20,9 @@ internal class Program
 
         // Configure Swagger in app services
         services.ConfigureSwaggerAppServices();
+
+        // Configurando as filas da aplicação
+        QueueUtil.ConfigureQueues();
 
         var app = builder.Build();
 

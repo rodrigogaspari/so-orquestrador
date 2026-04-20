@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using so_orquestrador.Infrastructure.Services.Util;
 using so_orquestrador.WebApi.Contracts.Requests;
 using so_orquestrador.WebApi.Contracts.Responses;
 using so_orquestrador.WebApi.SwaggerGen;
@@ -81,9 +82,11 @@ namespace so_orquestrador.Infrastructure.Services.Controllers
             {
                 if (!errosChamadaApi.Any() && !errosDados.Any())
                 {
-                    var responteConta = await contaCorrenteClient.PostAsJsonAsync($"/api/v1/contacorrente/{request.IdentificacaoCliente}/movimento", new { Operacao = "D", Valor = request.Valor });
+                    contaCorrenteClient.DefaultRequestHeaders.Add("IdempotencyKey", idempotencyKey);
 
-                    if (responteConta != null && HttpStatusCode.OK.Equals(respostaNota.StatusCode))
+                    var responteConta = await contaCorrenteClient.PostAsJsonAsync($"/api/v1/contacorrente/{request.IdentificacaoCliente}/movimento", new { TipoMovimento = "D", Valor = request.Valor });
+
+                    if (responteConta != null && HttpStatusCode.OK.Equals(responteConta.StatusCode))
                     {
                         vendaResponse.IdentificacaoCliente = request.IdentificacaoCliente;
                         vendaResponse.Cliente = notaFiscal.Cliente;
@@ -93,10 +96,13 @@ namespace so_orquestrador.Infrastructure.Services.Controllers
                     }
                     else
                     {
+                        // Retorna informações sobre o problema com o lançamento
                         errosDados.Add("Não foi possível realizar o lançamento de débito do cliente. Verifique os dados do cliente.");
-                        //gravar na fila de cancelamento de NF-e
+                        errosDados.Add(await responteConta.Content.ReadAsStringAsync());
+                        errosDados.Add("Será realizado o cancelamento do documento emitido.");
 
-
+                        // Gravar na fila de cancelamento para que NF-e seja cancelada
+                        QueueUtil.PublicarMensagem(QueueUtil.FilaCancelar, notaFiscal);
                     }
                 }
             }
