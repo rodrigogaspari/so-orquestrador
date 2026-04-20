@@ -1,8 +1,6 @@
-//using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi;
-using so_orquestrador.Infrastructure.Services.Controllers;
+using so_orquestrador.WebApi.SwaggerGen;
 using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 
 internal class Program
 {
@@ -23,8 +21,6 @@ internal class Program
             client.BaseAddress = new Uri("https://localhost:7901");
         });
 
-
-
         // Adiciona serviços do Swagger
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -34,7 +30,6 @@ internal class Program
 
             c.OperationFilter<AddApiKeyHeaderParameter>();
         });
-
 
         builder.Services.AddSwaggerGen(options =>
         {
@@ -46,13 +41,9 @@ internal class Program
             });
         });
 
-
-
         builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
-
         var app = builder.Build();
-
 
         // Ativa o Swagger apenas em ambiente de desenvolvimento
         if (app.Environment.IsDevelopment())
@@ -60,7 +51,6 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
 
         app.MapControllers();
 

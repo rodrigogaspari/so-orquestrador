@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi;
+using so_orquestrador.WebApi.Contracts.Requests;
+using so_orquestrador.WebApi.Contracts.Responses;
+using so_orquestrador.WebApi.SwaggerGen;
 using Swashbuckle.AspNetCore.Filters;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Net;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace so_orquestrador.Infrastructure.Services.Controllers
 {
@@ -125,83 +124,5 @@ namespace so_orquestrador.Infrastructure.Services.Controllers
 
             return Ok(vendaResponse);
         }
-
-    }
-
-    [Serializable]
-    public class VendaRequest
-    {
-        public string? Cliente { get; set; }
-
-        public decimal? Valor { get; set; }
-
-        public string? IdentificacaoCliente { get; set; }
-    }
-
-    [Serializable]
-    public class CreateVendaRequestExample : IExamplesProvider<VendaRequest>
-    {
-        public VendaRequest GetExamples()
-        {
-            return new VendaRequest
-            {
-                Cliente = "José da Silva",
-                IdentificacaoCliente = "000.001.002-03",
-                Valor = 100m
-            };
-        }
-    }
-
-
-    public class AddApiKeyHeaderParameter : IOperationFilter
-    {
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
-        {
-            if (operation.Parameters.Where(p => p.Name.Equals("idempotencyKey")).Any())
-                operation.Parameters.Remove(operation.Parameters.Where(p => p.Name.Equals("idempotencyKey")).FirstOrDefault());
-             
-            operation.Parameters.Add(new OpenApiParameter
-                {
-                    Name = "idempotencyKey",
-                    In = ParameterLocation.Header,
-                    Required = true,
-                    Description = "Chave de idempotência para uso do endpoint.",
-                    Example = JsonValue.Create(Guid.NewGuid().ToString())
-                });
-            
-        }
-    }
-
-
-
-
-    [Serializable]
-    public class VendaResponse
-    {
-        public string? IdentificacaoCliente { get; set; }
-
-        public string? Cliente { get; set; }
-
-        public decimal? Valor { get; set; }
-
-        public string? Numero { get; set; }
-
-        public string? ChaveNFe { get; set; }
-    }
-
-
-
-    [Serializable]
-    public class NotaResponse
-    {
-        public string? IdentificacaoCliente { get; set; }
-
-        public string? Cliente { get; set; }
-
-        public string? Numero { get; set; }
-
-        public decimal? Valor { get; set; }
-
-        public string? Chave { get; set; }
     }
 }
