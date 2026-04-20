@@ -95,6 +95,8 @@ namespace so_orquestrador.Infrastructure.Services.Controllers
                     {
                         errosDados.Add("Não foi possível realizar o lançamento de débito do cliente. Verifique os dados do cliente.");
                         //gravar na fila de cancelamento de NF-e
+
+
                     }
                 }
             }

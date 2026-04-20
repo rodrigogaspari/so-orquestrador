@@ -1,6 +1,4 @@
-using Microsoft.OpenApi;
-using so_orquestrador.WebApi.SwaggerGen;
-using Swashbuckle.AspNetCore.Filters;
+using so_orquestrador.Infrastructure.Services.Extensions;
 
 internal class Program
 {
@@ -8,50 +6,22 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
+        var services = builder.Services;
 
-        // HttpClients para cada serviço
-        builder.Services.AddHttpClient("nota-fiscal-api", client =>
-        {
-            client.BaseAddress = new Uri("https://localhost:7801");
-        });
+        // Add controllers
+        services.AddControllers();
 
-        builder.Services.AddHttpClient("conta-corrente-api", client =>
-        {
-            client.BaseAddress = new Uri("https://localhost:7901");
-        });
+        // Add Http Clients to orchetrator
+        services.AddHttpClients();
 
-        // Adiciona serviços do Swagger
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-        builder.Services.AddSwaggerGen(c =>
-        {
-            c.ExampleFilters();
-
-            c.OperationFilter<AddApiKeyHeaderParameter>();
-        });
-
-        builder.Services.AddSwaggerGen(options =>
-        {
-            options.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Version = "v1",
-                Title = "API Venda",
-                Description = "Apresentação Smart Online - Gaspari",
-            });
-        });
-
-        builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
+        // Configure Swagger in app services
+        services.ConfigureSwaggerAppServices();
 
         var app = builder.Build();
 
-        // Ativa o Swagger apenas em ambiente de desenvolvimento
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
-
+        // Activate Swagger documentation in developmant environment
+        app.ActivateSwaggerInDebug(); 
+       
         app.MapControllers();
 
         app.Run();
