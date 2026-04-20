@@ -15,12 +15,12 @@ internal class Program
         // HttpClients para cada serviço
         builder.Services.AddHttpClient("nota-fiscal-api", client =>
         {
-            client.BaseAddress = new Uri("https://localhost:7001");
+            client.BaseAddress = new Uri("https://localhost:7801");
         });
 
         builder.Services.AddHttpClient("conta-corrente-api", client =>
         {
-            client.BaseAddress = new Uri("https://localhost:7002");
+            client.BaseAddress = new Uri("https://localhost:7901");
         });
 
 

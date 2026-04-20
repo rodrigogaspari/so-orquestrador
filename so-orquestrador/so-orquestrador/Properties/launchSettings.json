@@ -1,15 +1,5 @@
 {
   "profiles": {
-    "SoContaCorrente": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:6800;http://localhost:5189"
-    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
@@ -27,6 +17,16 @@
         "ASPNETCORE_URLS": "https://localhost:6000;http://localhost:5189"
       },
       "distributionName": ""
+    },
+    "SoOrquestrador": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:6800;http://localhost:5189"
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",

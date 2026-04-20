@@ -2,6 +2,7 @@
 using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -56,6 +57,7 @@ namespace so_orquestrador.Infrastructure.Services.Controllers
 
             try
             {
+                notaFiscalClient.DefaultRequestHeaders.Add("IdempotencyKey", idempotencyKey);
 
                 respostaNota = await notaFiscalClient.PostAsJsonAsync("/api/v1/notafiscal/nota", request);
 
@@ -84,8 +86,11 @@ namespace so_orquestrador.Infrastructure.Services.Controllers
 
                     if (responteConta != null && HttpStatusCode.OK.Equals(respostaNota.StatusCode))
                     {
+                        vendaResponse.IdentificacaoCliente = request.IdentificacaoCliente;
+                        vendaResponse.Cliente = notaFiscal.Cliente;
+                        vendaResponse.Numero = notaFiscal.Numero;
                         vendaResponse.Valor = request.Valor;
-                        vendaResponse.ChaveNFe = notaFiscal.ChaveNFe;
+                        vendaResponse.ChaveNFe = notaFiscal.Chave;
                     }
                     else
                     {
@@ -173,8 +178,13 @@ namespace so_orquestrador.Infrastructure.Services.Controllers
     [Serializable]
     public class VendaResponse
     {
+        public string? IdentificacaoCliente { get; set; }
+
+        public string? Cliente { get; set; }
+
         public decimal? Valor { get; set; }
 
+        public string? Numero { get; set; }
 
         public string? ChaveNFe { get; set; }
     }
@@ -184,8 +194,14 @@ namespace so_orquestrador.Infrastructure.Services.Controllers
     [Serializable]
     public class NotaResponse
     {
+        public string? IdentificacaoCliente { get; set; }
+
+        public string? Cliente { get; set; }
+
+        public string? Numero { get; set; }
+
         public decimal? Valor { get; set; }
 
-        public string? ChaveNFe { get; set; }
+        public string? Chave { get; set; }
     }
 }
